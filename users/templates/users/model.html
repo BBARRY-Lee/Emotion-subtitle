@@ -1,0 +1,13 @@
+<link rel="stylesheet" href="static/css/upload.css">
+
+
+<h1>File upload</h1>
+<h2>자막과 동영상을 업로드 해주세요</h2>
+
+<form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="file">
+        <button class="send" type="submit">분석하기</button>
+    </div>
+</form>
+
