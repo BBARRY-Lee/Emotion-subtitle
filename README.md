@@ -1,31 +1,27 @@
 # 프로그래머스 인공지능 데브코스 B5팀 Final Project
 
 ## 1. Introduction
-Muti-modal 감정 분류를 통한 감정이 반영된 자막 합성 서비스
+다중 감정 분류 모델을 활용한 'Emotion subtitle' 서비스
 <br>
 History : [Notion page](https://daisylee.notion.site/b5-4-2dfe4e8c3a7b48fabe3bf29f3de60076)
 
 <br>
 
 ## 2. Makers
-- 이지윤
-- 박지은
-- 한나영
-- 이규열
+- 이규열, 한나영, 이지윤, 박지은
+
 
 <br>
 
 ## 3. Service
-Muti-modal 감정 분류를 통한 감정이 반영된 자막 합성 서비스
+다중 감정 분류 모델을 활용해 자막의 감정을 판별하여, 감정 Label 별 스타일이 반영된 자막을 생성 후 동영상과 자동으로 합성하는 서비스입니다.
 
 <br>
 
 ## 4. Development process
-1. Text data와 Audio data를 활용해 Muti-modal 감정 분류 모델 구현
-2. Video에서 Audio data를 추출해 STT를 이용하여 발화에 따른 Timestamp와 Text data 추출
-3. 추출한 Text data를 Muti-modal 감정 분류 모델에 Input으로 하여, 감정이 Labeling된 Output 출력
-4. openCV와 PIL 라이브러리를 이용한 Text data → 감정 Label에 따른 자막 이미지 변환
-5. Video에 Timestamp에 맞는 감정 Label에 따른 자막 이미지 합성
+1. fine-tuning한 KoBERT 모델을 이용해 자막의 발화문을 5가지 감정 (분노, 슬픔, 불안, 기쁨, 중립)으로 분류합니다.
+2. 분류 결과에 따라 openCV와 PIL 라이브러리를 활용해 감정 Label 별 스타일의 자막을 생성합니다.
+3. 최종적으로, Time stamp에 따라 영상과 생성한 자막을 합성합니다.
 
 <br>
 
