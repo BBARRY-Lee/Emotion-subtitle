@@ -1,5 +1,4 @@
-# 용량문제로 영상 업로드 제외
-# git rm --cached ./input_video/test.mp4
+.DS_Store
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
