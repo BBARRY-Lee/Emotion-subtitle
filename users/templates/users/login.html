@@ -1,0 +1,28 @@
+{% load static %}
+<link rel="stylesheet" href="static/css/login.css">
+<br> 
+
+<div class="login-page">
+    <div class="form" >
+        
+        <form class="login-form" method="POST">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="username"/>
+            <input type="password" name="password" placeholder="password"/>
+            <button type="submit">login</button>
+        </form>
+        <a href="{% url 'user:signup' %}">
+            <button type="button" > 회원가입</button>
+        </a>
+    </div>
+</div>
+  <!--
+    <form action="" method="POST">
+    {% csrf_token %}
+    <input name="username" type="text">
+    <input name="password" type="password">
+    <input type="submit" value="로그인">
+</form>
+<a href="{% url 'user:signup' %}">회원가입</a>
+  -->
+

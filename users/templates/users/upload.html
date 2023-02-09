@@ -1,0 +1,20 @@
+<link rel="stylesheet" href="static/css/upload.css">
+
+
+<h1>File upload</h1>
+<h2>자막과 동영상을 업로드 해주세요</h2>
+
+<form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="file">
+        <input class="video_input" type="file" name="video" id="video" />
+        <label for="video" class="video_label" for="file">Upload your video</label>
+      
+        <input class="subtitle_input" type="file" name="subtitle" id="subtitle" />
+        <label for="subtitle" class="subtitle_label" for="file">Upload your subtitle</label>
+        <button class="send" type="submit">send</button>
+    </div>
+</form>
+
+
+
