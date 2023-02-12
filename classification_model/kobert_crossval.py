@@ -15,7 +15,6 @@ import gluonnlp as nlp
 from kobert.utils import get_tokenizer
 from kobert.pytorch_kobert import get_pytorch_kobert_model
 from transformers import AdamW
-from earlystopping import EarlyStopping
 
 from sklearn.model_selection import KFold, train_test_split
 from sklearn.preprocessing import LabelEncoder
@@ -100,14 +99,11 @@ def run_classifier():
   tokenizer = get_tokenizer()
   tok = nlp.data.BERTSPTokenizer(tokenizer, vocab, lower = False)
 
-  max_len = 50 #50으로 조정?
+  max_len = 50 
   batch_size = 64
-  #warmup_ratio = 0.1
   num_epochs = 15
   max_grad_norm = 1
-  #log_interval = 200
   learning_rate = 5e-5
-  patience = 2 
 
   train, test = train_test_split(txt_data.drop('new_label', axis = 1), test_size=0.3, shuffle = True, random_state=42, stratify= txt_data['le_sentiment'])
 
@@ -129,63 +125,59 @@ def run_classifier():
   optimizer = AdamW(optimizer_grouped_parameters, lr=learning_rate)
   loss_fn = nn.CrossEntropyLoss()
     
-  early_stopping = EarlyStopping(patience = patience, verbose = True)
-  early_stop_flag = False
-  
   for fold, (train_idx, val_idx) in enumerate(splits.split(np.arange(len(train)))):
-    if not early_stop_flag:
-      print('Fold {}'.format(fold + 1))
+    print('Fold {}'.format(fold + 1))
 
-      train_sampler = SubsetRandomSampler(train_idx)
-      val_sampler = SubsetRandomSampler(val_idx)
+    train_sampler = SubsetRandomSampler(train_idx)
+    val_sampler = SubsetRandomSampler(val_idx)
 
-      train_dataloader = torch.utils.data.DataLoader(data_train, batch_size = batch_size, num_workers = 5, sampler = train_sampler)
-      val_dataloader = torch.utils.data.DataLoader(data_train, batch_size = batch_size, num_workers = 5, sampler = val_sampler)
+    train_dataloader = torch.utils.data.DataLoader(data_train, batch_size = batch_size, num_workers = 5, sampler = train_sampler)
+    val_dataloader = torch.utils.data.DataLoader(data_train, batch_size = batch_size, num_workers = 5, sampler = val_sampler)
 
-      avg_val_losses, avg_train_losses = [], [] #epoch 당 평균 loss
+    avg_val_losses, avg_train_losses = [], [] #epoch 당 평균 loss
+    
+    for e in range(num_epochs):
+      val_losses, train_losses = [], []
       
-      for e in range(num_epochs):
-        val_losses, train_losses = [], []
-        
-        train_accuracy = [0 for _ in range(4)]
-        val_accuracy = [0 for _ in range(4)]
-        
-        model.train()
-        for batch_id, (token_ids, valid_length, segment_ids, label) in tqdm(enumerate(train_dataloader), total=len(train_dataloader)):
-            for param in model.parameters():
-              param.grad = None
-            token_ids = token_ids.long().to(device)
-            segment_ids = segment_ids.long().to(device)
-            valid_length= valid_length
-            label = label.long().to(device)
-            out = model(token_ids, valid_length, segment_ids)
-            loss = loss_fn(out, label)
-            loss.backward()
-            torch.nn.utils.clip_grad_norm_(model.parameters(), max_grad_norm)
-            optimizer.step()
-            train_losses.append(loss.item())
+      train_accuracy = [0 for _ in range(4)]
+      val_accuracy = [0 for _ in range(4)]
+      
+      model.train()
+      for batch_id, (token_ids, valid_length, segment_ids, label) in tqdm(enumerate(train_dataloader), total=len(train_dataloader)):
+          for param in model.parameters():
+            param.grad = None
+          token_ids = token_ids.long().to(device)
+          segment_ids = segment_ids.long().to(device)
+          valid_length= valid_length
+          label = label.long().to(device)
+          out = model(token_ids, valid_length, segment_ids)
+          loss = loss_fn(out, label)
+          loss.backward()
+          torch.nn.utils.clip_grad_norm_(model.parameters(), max_grad_norm)
+          optimizer.step()
+          train_losses.append(loss.item())
 
+          for i in range(4):
+            acc = calc_label_accuracy(out, label)
+            train_accuracy[i] += acc[i]
+
+      for i in range(4):
+        print(f"train acc for label {le.inverse_transform([i])[0]}: {train_accuracy[i] / (batch_id+1)}")
+      
+      model.eval()
+      with torch.no_grad():
+        for batch_id, (token_ids, valid_length, segment_ids, label) in tqdm(enumerate(val_dataloader), total=len(val_dataloader)):
+            token_ids = token_ids.long().to(device)
+            segment_ids = segment_ids .long().to(device)
+            valid_length = valid_length
+            label = label.long().to(device)
+            out = model(token_ids, valid_length, segment_ids) #out: 각 class에 대한 softmax값 
+            loss = loss_fn(out, label)
+            val_losses.append(loss.item())
+            
             for i in range(4):
               acc = calc_label_accuracy(out, label)
-              train_accuracy[i] += acc[i]
-
-        for i in range(4):
-          print(f"train acc for label {le.inverse_transform([i])[0]}: {train_accuracy[i] / (batch_id+1)}")
-        
-        model.eval()
-        with torch.no_grad():
-          for batch_id, (token_ids, valid_length, segment_ids, label) in tqdm(enumerate(val_dataloader), total=len(val_dataloader)):
-              token_ids = token_ids.long().to(device)
-              segment_ids = segment_ids .long().to(device)
-              valid_length = valid_length
-              label = label.long().to(device)
-              out = model(token_ids, valid_length, segment_ids) #out: 각 class에 대한 softmax값 
-              loss = loss_fn(out, label)
-              val_losses.append(loss.item())
-              
-              for i in range(4):
-                acc = calc_label_accuracy(out, label)
-                val_accuracy[i] += acc[i]
+              val_accuracy[i] += acc[i]
         
         for i in range(4):
           print(f"val acc for label {le.inverse_transform([i])[0]}: {val_accuracy[i] / (batch_id+1)}")
@@ -197,15 +189,6 @@ def run_classifier():
         
         print(f"epoch {e+1} train_loss: {train_loss:.4f} val_loss: {val_loss:.4f}")
         
-        early_stopping(val_loss, model)
-        if early_stopping.early_stop:
-          print("Early stopping")
-          early_stop_flag = True
-          break 
-
-  model.load_state_dict(torch.load('checkpoint.pt'))
-  #torch.save(model.state_dict(), '/home/ubuntu/model/pre-trained/230209_kobert_earlyStopping.pt')
-
   model.eval()
   test_accuracy = [0 for _ in range(4)]
   test_dataloader = torch.utils.data.DataLoader(data_test, batch_size = batch_size, num_workers = 5)
@@ -224,5 +207,3 @@ def run_classifier():
 
   for i in range(4):
     print(f"test acc for label {le.inverse_transform([i])[0]} : {test_accuracy[i] / (batch_id+1)}")
-
-run_classifier()
