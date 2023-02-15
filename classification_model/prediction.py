@@ -39,7 +39,8 @@ class BERTDataset(Dataset):
     def __init__(self, dataset, sent_idx, label_idx, bert_tokenizer, max_len,
                 pad, pair, mode = "train"):
         self.mode = mode
-        transform = nlp.data.BERTSentenceTransform(bert_tokenizer, max_seq_length = max_len, pad = pad, pair = pair)
+        transform = nlp.data.BERTSentenceTransform(bert_tokenizer, max_seq_length = max_len, 
+                                                   pad = pad, pair = pair)
         if self.mode == "train":
             self.sentences = [transform([i[sent_idx]]) for i in dataset]
             self.labels = [np.int32(i[label_idx]) for i in dataset]
@@ -76,7 +77,8 @@ class BERTClassifier(nn.Module):
   def forward(self, token_ids, valid_length, segment_ids):
       attention_mask = self.gen_attention_mask(token_ids, valid_length)
       
-      _, pooler = self.bert(input_ids = token_ids, token_type_ids = segment_ids.long(), attention_mask = attention_mask.float().to(token_ids.device))
+      _, pooler = self.bert(input_ids = token_ids, token_type_ids = segment_ids.long(), 
+                            attention_mask = attention_mask.float().to(token_ids.device))
       if self.dr_rate:
           out = self.dropout(pooler)
       return self.classifier(out)
@@ -98,8 +100,10 @@ class BERTPredictor():
 
   def transform(self, input_data, sent_idx = 2):
 
-    test_data = BERTDataset(input_data['Text'], sent_idx, 1, self.tok, max_len, True, False, mode = 'test')
-    test_dataloader = torch.utils.data.DataLoader(test_data, batch_size=batch_size, num_workers=5)
+    test_data = BERTDataset(input_data['Text'], sent_idx, 1, 
+                            self.tok, max_len, True, False, mode = 'test')
+    test_dataloader = torch.utils.data.DataLoader(test_data, batch_size=batch_size, 
+                                                  num_workers=5)
     
     self.model.eval()
 
@@ -132,7 +136,9 @@ def eval(input_path, model_path):
   test_input = pd.read_csv(input_path, encoding='cp949')
   print(test_input)
   model_path = model_path
-  pipe = make_pipeline(text_preprocess(), BERTPredictor(model_path = model_path, device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')))
+  pipe = make_pipeline(text_preprocess(), 
+                       BERTPredictor(model_path = model_path, 
+                                     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')))
   labeled_script = pipe.transform(test_input)
   labeled_script.to_csv("/home/ubuntu/data/test_result.csv", index = False, encoding = 'utf-8-sig')
     
