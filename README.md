@@ -1,39 +1,51 @@
-# 프로그래머스 인공지능 데브코스 B5팀 Final Project
+# 5가지의 감정자막 자동 생성 'EmoS' 서비스
 
 ## 1. Introduction
-다중 감정 분류 모델을 활용한 'Emotion subtitle' 서비스
-<br>
-History : [Notion page](https://daisylee.notion.site/b5-4-2dfe4e8c3a7b48fabe3bf29f3de60076)
-
-<br>
-
-## 2. Makers
-- 이규열, 한나영, 이지윤, 박지은
-
-
+fine-tuning한 KLUE\RoBERTa 모델과 OpenCV를 활용한 5가지의 감정자막 자동 생성 'EmoS' 서비스는 <br>
+발화문을 AI 모델을 통해 분류한 감정에 따라 화자의 감정을 반영한 각각 다른 스타일의 자막을 생성하는 서비스입니다. <br>
+본 서비스를 통해 음성을 들을 수 없는 상황이나 청각 장애를 가진 사람들도 화자의 감정을 생생하게 전달받을 수 있습니다. <br>
+- ['EmoS' 서비스 시연 동영상](https://drive.google.com/file/d/1roGFsI-8gxlmMXDeHjcZsTYdy2Em3rTX/view?usp=share_link)
 <br>
 
-## 3. Service
-다중 감정 분류 모델을 활용해 자막의 감정을 판별하여, 감정 Label 별 스타일이 반영된 자막을 생성 후 동영상과 자동으로 합성하는 서비스입니다.
+## 2. Development process
+1. **데이터 수집 및 전처리** : AI-Hub의 감정 분류를 위한 음성데이터셋과 감성대화 말뭉치 사용
+2. **Sentiment Analysis** : fine-tuning한 KLUE\RoBERTa 모델을 이용해 발화문을 5가지 감정 (분노, 슬픔, 불안, 기쁨, 중립) 분류
+3. **Caption Generation** : openCV와 PIL를 활용해 감정 Label 별 자막을 생성해 Time stamp에 따라 영상과 자막 합성
+4. **Frontend & Backend** : AWS, Django, CSS, HTML을 활용한 FE & BE 구축
 
 <br>
-
-## 4. Development process
-1. fine-tuning한 KLUE\RoBERTa 모델을 이용해 자막의 발화문을 5가지 감정 (분노, 슬픔, 불안, 기쁨, 중립)으로 분류합니다.
-2. 분류 결과에 따라 openCV와 PIL 라이브러리를 활용해 감정 Label 별 스타일의 자막을 생성합니다.
-3. 최종적으로, Time stamp에 따라 영상과 생성한 자막을 합성합니다.
-
-<br>
-
-## 5. Tech Stacks
-![Python](https://img.shields.io/badge/-Python-14354C?style=flat-square&logo=Python)
-![TensorFlow](https://img.shields.io/badge/TensorFlow-%23FF6F00.svg?style=flat-square&logo=TensorFlow&logoColor=white)
-![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=flat-square&logo=PyTorch&logoColor=white)
-![openCV](https://img.shields.io/badge/opencv-5C3EE8?style=flat-square&logo=opencv&logoColor=black)
-<br/>
+<img src=https://user-images.githubusercontent.com/99329555/219366404-9b55feef-230e-4216-bfb1-9c16e973e859.png width="100%" height="100%"/>
 <br>
   
-## 6. Git Commit Message Convention
+## 3. Prototype
+<img src=https://user-images.githubusercontent.com/99329555/219374999-d1817119-cc52-4247-8eca-7d5c22a0caa2.png width="100%" height="100%"/>
+<img src=https://user-images.githubusercontent.com/99329555/219375043-6b872649-5aa2-4308-a8fe-4d27cfbfa03e.png width="100%" height="100%"/>
+<img src=https://user-images.githubusercontent.com/99329555/219375094-f8b73e23-8496-45e6-9c96-48a3704c3556.png width="100%" height="100%"/>
+<img src=https://user-images.githubusercontent.com/99329555/219375178-46bf9e37-9f91-494e-a96e-86c954379b5d.png width="100%" height="100%"/>
+<img src=https://user-images.githubusercontent.com/99329555/219375231-05af846e-2d4c-44a2-bd63-30c86f0f0d58.png width="100%" height="100%"/>
+<img src=https://user-images.githubusercontent.com/99329555/219373432-dbc8195a-f308-4513-8606-edd0fc00a8cb.png width="100%" height="100%"/>
+<img src=https://user-images.githubusercontent.com/99329555/219375280-d2d3db7b-c144-433c-87ab-f39e1d8b9ed4.png width="100%" height="100%"/>
+<img src=https://user-images.githubusercontent.com/99329555/219373100-094139c7-90c4-48bf-8d16-32028603ed64.png width="100%" height="100%"/>
+<br>
+
+## 4. Makers
+프로그래머스 인공지능 데브코스 4기 B5팀의 팀원들과 함께 기획하고 개발하였습니다.
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable --> 
+
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/seroak"><img src="https://user-images.githubusercontent.com/99329555/219380160-e69e840d-6064-44c2-b1a3-ebb59fcc51da.png" width="150" height="150"><br /><sub><b>이규열</b></sub></td>
+    <td align="center"><a href="https://github.com/Bandi120424"><img src="https://user-images.githubusercontent.com/99329555/219380477-a9b9cc6c-836d-4c70-8707-b2128ee2bd5c.png" width="150" height="150"><br /><sub><b>한나영</b></sub></td>
+    <td align="center"><a href="https://github.com/BBARRY-Lee"><img src="https://user-images.githubusercontent.com/99329555/219381993-1219c0ec-b038-4c7b-9182-28696e40eca4.png" width="150" height="150"><br /><sub><b>이지윤</b></sub></td>
+    <td align="center"><a href="https://github.com/Jieun-Enna"><img src="https://user-images.githubusercontent.com/99329555/219381428-0ab5b2c4-e4bf-4d0b-acc2-0f3e19905fce.png" width="150" height="150"><br /><sub><b>박지은</b></sub></td>
+  </tr>
+</table>
+
+<br>
+
+## 5. Git Commit Message Convention
 ### Commit Message Format
 
 #### [참고](https://underflow101.tistory.com/31)
