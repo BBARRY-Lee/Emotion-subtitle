@@ -9,8 +9,8 @@ fine-tuning한 KLUE\RoBERTa 모델과 OpenCV를 활용한 5가지의 감정자�
 
 ## 2. Development process
 1. **데이터 수집 및 전처리** : AI-Hub의 감정 분류를 위한 음성데이터셋과 감성대화 말뭉치 사용
-2. **Sentiment Analysis** : fine-tuning한 KLUE\RoBERTa 모델을 이용해 발화문을 5가지 감정 (분노, 슬픔, 불안, 기쁨, 중립) 분류
-3. **Caption Generation** : openCV와 PIL를 활용해 감정 Label 별 자막을 생성해 Time stamp에 따라 영상과 자막 합성
+2. **Sentiment Analysis** : fine-tuning한 KLUE\RoBERTa 모델을 이용해 발화문을 5가지 감정(분노, 슬픔, 불안, 기쁨, 중립) 분류
+3. **Caption Generation** : openCV와 PIL를 활용해 감정 Label 별 자막을 생성하고 Time stamp에 따라 영상과 자막 합성
 4. **Frontend & Backend** : AWS, Django, CSS, HTML을 활용한 FE & BE 구축
 
 <br>
