@@ -19,7 +19,7 @@ History : [Notion page](https://daisylee.notion.site/b5-4-2dfe4e8c3a7b48fabe3bf2
 <br>
 
 ## 4. Development process
-1. fine-tuning한 KoBERT 모델을 이용해 자막의 발화문을 5가지 감정 (분노, 슬픔, 불안, 기쁨, 중립)으로 분류합니다.
+1. fine-tuning한 KLUE\RoBERTa 모델을 이용해 자막의 발화문을 5가지 감정 (분노, 슬픔, 불안, 기쁨, 중립)으로 분류합니다.
 2. 분류 결과에 따라 openCV와 PIL 라이브러리를 활용해 감정 Label 별 스타일의 자막을 생성합니다.
 3. 최종적으로, Time stamp에 따라 영상과 생성한 자막을 합성합니다.
 
