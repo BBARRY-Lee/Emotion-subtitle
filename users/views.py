@@ -9,7 +9,7 @@ def model_view(request):
         user = request.user
         print(subtitle)
         print(user)
-        model_path = '/home/ubuntu/model/pre-trained/230206_kobert_epoch35.pth'
+        model_path = '/home/ubuntu/model/pre-trained/klueroberta_crossVal_epoch60.pth'
         pred.eval(input_path = ("/home/ubuntu/myapp/"+subtitle), model_path = model_path)
     return render(request, "users/model.html")
 
