@@ -6,6 +6,13 @@ fine-tuning한 KLUE\RoBERTa 모델과 OpenCV를 활용한 5가지의 감정자�
 본 서비스를 통해 음성을 들을 수 없는 상황이나 청각 장애를 가진 사람들도 화자의 감정을 생생하게 전달받을 수 있습니다. <br>
 - ['EmoS' 서비스 시연 동영상](https://drive.google.com/file/d/1roGFsI-8gxlmMXDeHjcZsTYdy2Em3rTX/view?usp=share_link)
 <br>
+2023년 2월 17일, 본 프로젝트를 통해 프로그래머스 인공지능 데브코스 4기의 최우수 프로젝트 팀으로 선정되어 최우수상을 수상하였습니다 🙂 <br>
+<br>
+<img src=https://user-images.githubusercontent.com/99329555/219948186-04f92992-aa5f-4e4e-9cdb-b9a695181ef9.png width="100%" height="100%"/>
+
+
+
+<br>
 
 ## 2. Development process
 1. **데이터 수집 및 전처리** : AI-Hub의 감정 분류를 위한 음성데이터셋과 감성대화 말뭉치 사용
