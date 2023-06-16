@@ -225,22 +225,20 @@ def run_classifier():
     
     for fold, (train_idx, val_idx) in enumerate(skf.split(train[sent_col], train[label_col])):
         print('Fold {}'.format(fold + 1))
-        
-        train_labels = encode_label(train.loc[train_idx], label_col)
-        val_labels = encode_label(train.loc[val_idx], label_col)
-        
-        train_sample = sentenceDataset(train.loc[train_idx], sent_col, tokenizer, train_labels)
-        val_sample = sentenceDataset(train.loc[val_idx], sent_col, tokenizer, val_labels)
-        
-        train_dataloader = DataLoader(train_sample, batch_size=CFG['BATCH_SIZE'], 
-                                      shuffle=True, num_workers = 0) 
-        val_dataloader = DataLoader(val_sample, batch_size=CFG['BATCH_SIZE'], 
-                                    shuffle = True, num_workers = 0)
-
-        model = train(model, train_dataloader, val_dataloader, CFG['LEARNING_RATE'], CFG['EPOCHS'])
-        
-    #torch.save(model.state_dict(), '/home/ubuntu/model/pre-trained/klueroberta_crossVal_epoch60.pt')
-
+        if fold == 0:
+            train_labels = encode_label(train.loc[train_idx], label_col)
+            val_labels = encode_label(train.loc[val_idx], label_col)
+            
+            train_sample = sentenceDataset(train.loc[train_idx], sent_col, tokenizer, train_labels)
+            val_sample = sentenceDataset(train.loc[val_idx], sent_col, tokenizer, val_labels)
+            
+            train_dataloader = DataLoader(train_sample, batch_size=CFG['BATCH_SIZE'], 
+                                          shuffle=True, num_workers = 0) 
+            val_dataloader = DataLoader(val_sample, batch_size=CFG['BATCH_SIZE'], 
+                                        shuffle = True, num_workers = 0)
+    
+            model = train(model, train_dataloader, val_dataloader, CFG['LEARNING_RATE'], CFG['EPOCHS'])
+            
     #evaluation
     test_labels = encode_label(test, label_col)
     test_accuracy = [0 for _ in range(4)]
